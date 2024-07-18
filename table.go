@@ -193,6 +193,7 @@ func (rt *RoutingTable) addPeer(p peer.ID, queryPeer bool, isReplaceable bool) (
 	bucketID := rt.bucketIdForPeer(p)
 	bucket := rt.buckets[bucketID]
 
+	fmt.Printf("【RoutingTable】addPeer => %s\n", p)
 	now := time.Now()
 	var lastUsefulAt time.Time
 	if queryPeer {
