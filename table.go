@@ -4,7 +4,7 @@ package kbucket
 import (
 	"context"
 	"errors"
-	"fmt"
+	log2 "log"
 	"sync"
 	"time"
 
@@ -193,7 +193,7 @@ func (rt *RoutingTable) addPeer(p peer.ID, queryPeer bool, isReplaceable bool) (
 	bucketID := rt.bucketIdForPeer(p)
 	bucket := rt.buckets[bucketID]
 
-	fmt.Printf("【RoutingTable】addPeer => %s\n", p)
+	log2.Printf("【RoutingTable】addPeer => %s\n", p)
 	now := time.Now()
 	var lastUsefulAt time.Time
 	if queryPeer {
@@ -522,15 +522,15 @@ func (rt *RoutingTable) ListPeers() []peer.ID {
 
 // Print prints a descriptive statement about the provided RoutingTable
 func (rt *RoutingTable) Print() {
-	fmt.Printf("Routing Table, bs = %d, Max latency = %d\n", rt.bucketsize, rt.maxLatency)
+	log2.Printf("Routing Table, bs = %d, Max latency = %d\n", rt.bucketsize, rt.maxLatency)
 	rt.tabLock.RLock()
 
 	for i, b := range rt.buckets {
-		fmt.Printf("\tbucket: %d\n", i)
+		log2.Printf("\tbucket: %d\n", i)
 
 		for e := b.list.Front(); e != nil; e = e.Next() {
 			p := e.Value.(*PeerInfo).Id
-			fmt.Printf("\t\t- %s %s\n", p.String(), rt.metrics.LatencyEWMA(p).String())
+			log2.Printf("\t\t- %s %s\n", p.String(), rt.metrics.LatencyEWMA(p).String())
 		}
 	}
 	rt.tabLock.RUnlock()
